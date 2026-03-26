@@ -1,0 +1,1 @@
+"""FastAPI application for Text-to-SQL inference."""

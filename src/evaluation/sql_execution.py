@@ -1,0 +1,1 @@
+"""Execute generated SQL against databases and check correctness."""

@@ -1,0 +1,4 @@
+# Learning rate sweep configuration
+sweep:
+  parameter: "training.learning_rate"
+  values: [1e-5, 5e-5, 1e-4, 2e-4, 5e-4]

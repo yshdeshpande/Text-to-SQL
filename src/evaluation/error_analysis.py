@@ -1,0 +1,1 @@
+"""Categorize and analyze failure modes in generated SQL."""

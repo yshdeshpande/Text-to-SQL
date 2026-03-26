@@ -1,0 +1,6 @@
+# LoRA rank sweep configuration
+# Inherits from base.yaml, overrides lora.r for each run
+sweep:
+  parameter: "lora.r"
+  values: [8, 16, 32, 64]
+  # alpha is set to 2x rank automatically

@@ -1,0 +1,14 @@
+# vLLM serving configuration
+model:
+  path: "checkpoints/best"
+  quantization: null  # or "gptq", "awq"
+
+server:
+  host: "0.0.0.0"
+  port: 8000
+  max_model_len: 2048
+
+engine:
+  gpu_memory_utilization: 0.90
+  max_num_batched_tokens: 4096
+  max_num_seqs: 16
