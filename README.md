@@ -9,10 +9,10 @@ This project covers the full LLM lifecycle: dataset curation, parameter-efficien
 ```mermaid
 flowchart LR
     subgraph Data["1 · Data Pipeline"]
-        D1[Download Dataset<br/><i>Spider / BIRD-Bench</i>]
+        D1[Download Datasets<br/><i>Spider + Gretel Synthetic</i>]
         D2[Preprocess<br/><i>clean, deduplicate</i>]
         D3[Format<br/><i>instruction-tuning<br/>chat template</i>]
-        D4[Split<br/><i>train / val / test<br/>by schema</i>]
+        D4[Split<br/><i>train / val by schema<br/>test = Spider dev</i>]
         D1 --> D2 --> D3 --> D4
     end
 
@@ -26,7 +26,7 @@ flowchart LR
     end
 
     subgraph Eval["3 · Evaluation"]
-        E1[Execution Accuracy<br/><i>run SQL, check results</i>]
+        E1[Execution Accuracy<br/><i>run SQL on Spider DBs</i>]
         E2[Exact / Partial Match]
         E3[Error Analysis<br/><i>failure taxonomy</i>]
         E4[Ablations<br/><i>rank, LR, data volume</i>]
@@ -58,6 +58,21 @@ flowchart LR
     S2 --> S3
 ```
 
+## Data Strategy
+
+Training uses two datasets to balance quality and scale, with a clean evaluation setup:
+
+| Split | Source | Size (approx) | Purpose |
+|-------|--------|:-:|---------|
+| **Train** | Spider train + Gretel synthetic (complex only) | ~62K | QLoRA fine-tuning |
+| **Val** | Held out from train pool, split by schema | ~7K | Loss monitoring, early stopping |
+| **Test** | Spider dev (official, untouched) | 1,034 | Final execution accuracy — zero leakage |
+
+**Why this setup?**
+- **Spider train** (8.6K examples, 146 databases) provides real cross-domain Text-to-SQL pairs with SQLite databases for execution accuracy testing.
+- **Gretel synthetic_text_to_sql** (~60K filtered) adds scale with complex queries — JOINs, subqueries, aggregations, window functions. Zero benchmark contamination since it's independently generated.
+- **Spider dev** (20 completely unseen databases) is held out strictly for final evaluation. Train/dev database schemas are disjoint by design.
+
 ## Quick Start
 
 ```bash
@@ -79,7 +94,7 @@ make serve
 
 ## Results
 
-> _Results will be populated as training runs complete._
+> _Results will be populated as training runs complete. Evaluated on Spider dev (unseen schemas)._
 
 | Model | Method | Exec Accuracy | Exact Match | Latency (ms) | Memory (GB) | Cost / 1K queries |
 |-------|--------|:---:|:---:|:---:|:---:|:---:|

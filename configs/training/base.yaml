@@ -40,6 +40,6 @@ wandb:
   run_name: null  # auto-generated if null
 
 data:
-  dataset: "b-mc2/sql-create-context"
-  max_train_samples: null  # null = use all
-  max_eval_samples: null
+  train_path: "data/processed/train"
+  val_path: "data/processed/val"
+  test_path: "data/processed/test"
