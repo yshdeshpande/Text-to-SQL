@@ -11,8 +11,8 @@ from datasets import concatenate_datasets
 from src.data.download import download_all
 from src.data.preprocess import preprocess
 from src.data.analysis import compute_stats
-from src.data.format import format_for_training  # YOU WILL WRITE THIS
-from src.data.split import split_by_schema        # YOU WILL WRITE THIS
+from src.data.format import format_for_training  
+from src.data.split import split_by_schema        
 
 logging.basicConfig(
     level=logging.INFO,
